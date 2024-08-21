@@ -1,7 +1,12 @@
 package id.my.hendisantika.springbootrestclient.controller;
 
+import id.my.hendisantika.springbootrestclient.dto.EmployeeDto;
 import id.my.hendisantika.springbootrestclient.service.EmployeeService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,4 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+
+    // build create employee REST API
+    @PostMapping
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employee) {
+        EmployeeDto savedEmployee = employeeService.createEmployee(employee);
+        return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
+    }
 }
