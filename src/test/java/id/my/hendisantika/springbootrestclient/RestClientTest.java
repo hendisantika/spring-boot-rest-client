@@ -9,6 +9,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -121,5 +122,20 @@ public class RestClientTest {
                 });
 
         Assertions.assertEquals(404, thrown.getStatusCode().value());
+    }
+
+    @Test
+    public void exceptionHandlingServerErrorDemo() {
+        HttpServerErrorException thrown = Assertions.assertThrows(HttpServerErrorException.class,
+                () -> {
+
+                    EmployeeDto employee = restClient.get()
+                            .uri("/api/employees/500")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .retrieve()
+                            .body(EmployeeDto.class);
+                });
+
+        Assertions.assertEquals(500, thrown.getStatusCode().value());
     }
 }
