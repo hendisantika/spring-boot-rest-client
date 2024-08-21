@@ -1,9 +1,14 @@
 package id.my.hendisantika.springbootrestclient.controller;
 
+import id.my.hendisantika.springbootrestclient.entity.User;
 import id.my.hendisantika.springbootrestclient.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,4 +27,9 @@ public class UserController {
 
     // Declare the service as final to ensure its immutability
     private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
 }
