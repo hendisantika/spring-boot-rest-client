@@ -52,4 +52,19 @@ public class EmployeeJdbcRepository {
         employee.setId(id.longValue());
         return employee;
     }
+
+    @Transactional
+    public Employee update(Employee employee) {
+        String sql = "UPDATE employees SET first_name = ?, last_name = ?, email = ? WHERE id = ?";
+        int count = jdbcClient.sql(sql)
+                .param(1, employee.getFirstName())
+                .param(2, employee.getLastName())
+                .param(3, employee.getEmail())
+                .param(4, employee.getId())
+                .update();
+        if (count == 0) {
+            throw new RuntimeException("Employee not found");
+        }
+        return employee;
+    }
 }
