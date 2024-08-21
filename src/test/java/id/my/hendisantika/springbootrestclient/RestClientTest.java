@@ -1,7 +1,11 @@
 package id.my.hendisantika.springbootrestclient;
 
+import id.my.hendisantika.springbootrestclient.dto.EmployeeDto;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 /**
@@ -22,5 +26,20 @@ public class RestClientTest {
         restClient = RestClient.builder()
                 .baseUrl("http://localhost:8080")
                 .build();
+    }
+
+    @Order(1)
+    @Test
+    public void createEmployee() {
+        EmployeeDto newEmployee = new EmployeeDto(null, "admin", "admin", "admin123@gmail.com");
+
+        EmployeeDto savedEmployee = restClient.post()
+                .uri("/api/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(newEmployee)
+                .retrieve()
+                .body(EmployeeDto.class);
+
+        System.out.println(savedEmployee.toString());
     }
 }
