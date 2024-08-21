@@ -26,4 +26,14 @@ public class EmployeeService {
         Employee savedEmployee = employeeRepository.save(employee);
         return EmployeeConverter.mapToEmployeeDto(savedEmployee);
     }
+
+    public EmployeeDto getEmployeeById(Long employeeId) {
+        // we need to check whether employee with given id is exist in DB or not
+        Employee existingEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Employee not exists with a given id : " + employeeId)
+                );
+
+        return EmployeeConverter.mapToEmployeeDto(existingEmployee);
+    }
 }
