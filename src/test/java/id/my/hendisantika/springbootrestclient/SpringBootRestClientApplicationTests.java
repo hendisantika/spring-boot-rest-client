@@ -1,13 +1,33 @@
 package id.my.hendisantika.springbootrestclient;
 
-import org.junit.jupiter.api.Test;
+import id.my.hendisantika.springbootrestclient.repository.EmployeeRepository;
+import id.my.hendisantika.springbootrestclient.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
+@Testcontainers
+@SpringBootTest(
+        properties = {
+                "management.endpoint.health.show-details=always",
+                "spring.datasource.url=jdbc:tc:mysql:8.4.0:///employeeDB"
+        },
+        webEnvironment = RANDOM_PORT
+)
 class SpringBootRestClientApplicationTests {
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-    @Test
-    void contextLoads() {
+    @Autowired
+    private UserRepository userRepository;
+
+    @BeforeEach
+    void deleteAll() {
+        userRepository.deleteAll();
+        employeeRepository.deleteAll();
     }
 
 }
