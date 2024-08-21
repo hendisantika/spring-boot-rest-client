@@ -5,8 +5,11 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -74,5 +77,19 @@ public class RestClientTest {
                 .body(EmployeeDto.class);
 
         System.out.println(result.toString());
+    }
+
+    @Order(4)
+    @Test
+    public void findAll() {
+        List<EmployeeDto> listOfEmployees = restClient.get()
+                .uri("/api/employees")
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<EmployeeDto>>() {
+                });
+
+        listOfEmployees.forEach(employeeDto -> {
+            System.out.println(employeeDto.toString());
+        });
     }
 }
