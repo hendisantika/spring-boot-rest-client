@@ -3,9 +3,12 @@ package id.my.hendisantika.springbootrestclient.repository;
 import id.my.hendisantika.springbootrestclient.entity.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +37,19 @@ public class EmployeeJdbcRepository {
     public Optional<Employee> findById(Long id) {
         String sql = "SELECT * FROM employees WHERE id = :id";
         return jdbcClient.sql(sql).param("id", id).query(Employee.class).optional();
+    }
+
+    @Transactional
+    public Employee save(Employee employee) {
+        String sql = "INSERT INTO employees(first_name, last_name, email) VALUES(:first_name,:last_name,:email)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcClient.sql(sql)
+                .param("first_name", employee.getFirstName())
+                .param("last_name", employee.getLastName())
+                .param("email", employee.getEmail())
+                .update(keyHolder);
+        BigInteger id = keyHolder.getKeyAs(BigInteger.class);
+        employee.setId(id.longValue());
+        return employee;
     }
 }
