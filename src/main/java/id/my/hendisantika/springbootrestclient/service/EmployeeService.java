@@ -58,4 +58,14 @@ public class EmployeeService {
         Employee employee = EmployeeConverter.mapToEmployee(employeeDto);
         return EmployeeConverter.mapToEmployeeDto(employeeRepository.save(employee));
     }
+
+    public void deleteEmployee(Long employeeId) {
+        // we need to check whether employee with given id is exist in DB or not
+        Employee existingEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Employee not exists with a given id : " + employeeId)
+                );
+
+        employeeRepository.deleteById(employeeId);
+    }
 }
