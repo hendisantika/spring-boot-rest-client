@@ -2,6 +2,7 @@ package id.my.hendisantika.springbootrestclient;
 
 import id.my.hendisantika.springbootrestclient.dto.EmployeeDto;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import java.util.List;
  * Time: 20.32
  * To change this template use File | Settings | File Templates.
  */
+@Disabled("Integration test - requires application to be running on localhost:8080")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RestClientTest {
     private final RestClient restClient;
