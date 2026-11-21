@@ -16,7 +16,6 @@ updates:
     commit-message:
       prefix: "build(deps)"
       prefix-development: "build(deps-dev)"
-      include: scope
     groups:
       spring-boot:
         patterns:
@@ -55,7 +54,6 @@ updates:
       - github-actions
     commit-message:
       prefix: "ci(deps)"
-      include: scope
     groups:
       github-actions:
         patterns:
@@ -75,4 +73,3 @@ updates:
       - docker
     commit-message:
       prefix: "build(docker)"
-      include: scope
