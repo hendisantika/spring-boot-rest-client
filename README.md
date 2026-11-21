@@ -1,20 +1,26 @@
 # Spring Boot REST Client
 
+[![Java CI with Maven](https://github.com/hendisantika/spring-boot-rest-client/actions/workflows/maven.yml/badge.svg)](https://github.com/hendisantika/spring-boot-rest-client/actions/workflows/maven.yml)
+![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-6DB33F?logo=springboot)
+![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot)
+
 A comprehensive Spring Boot application demonstrating the use of Spring's modern RestClient for consuming REST APIs,
 with full CRUD operations, database integration, and API documentation.
 
 ## Technologies Used
 
-- **Java 21** - Modern Java features and performance improvements
-- **Spring Boot 3.5.7** - Latest Spring Boot framework
+- **Java 25** - Latest LTS Java release
+- **Spring Boot 4.1.1** - Spring Framework 7 based Spring Boot
 - **Spring Data JPA** - Data persistence layer
-- **Hibernate 6.6** - ORM framework
+- **Hibernate 7.4** - ORM framework
 - **MySQL 9.1** - Database (via Docker Compose)
-- **Spring RestClient** - Modern HTTP client for consuming REST APIs
+- **Spring RestClient** - Modern HTTP client (`spring-boot-starter-restclient`)
+- **Jackson 3** - JSON (de)serialization (`tools.jackson`)
 - **Lombok** - Reduces boilerplate code
-- **SpringDoc OpenAPI 2.8.14** - API documentation (Swagger UI)
+- **SpringDoc OpenAPI 3.1.1** - API documentation (Swagger UI)
 - **JUnit 5** - Unit and integration testing
-- **Testcontainers** - Database testing with containers
+- **Testcontainers 2.0** - Database testing with containers (`testcontainers-mysql`)
 - **Docker Compose** - Container orchestration for MySQL
 
 ## Features
@@ -31,8 +37,8 @@ with full CRUD operations, database integration, and API documentation.
 
 ## Prerequisites
 
-- Java 21 or higher
-- Maven 3.6+
+- Java 25 (JDK 25) or higher
+- Maven 3.9+ (or use the bundled Maven Wrapper `./mvnw`)
 - Docker and Docker Compose (for database)
 
 ## Project Structure
@@ -75,13 +81,13 @@ cd spring-boot-rest-client
 ### 2. Build the project
 
 ```bash
-mvn clean install
+./mvnw clean install
 ```
 
 ### 3. Run the tests
 
 ```bash
-mvn test
+./mvnw test
 ```
 
 All unit tests should pass:
@@ -128,7 +134,7 @@ The application will:
 Once the application is running, access the Swagger UI at:
 
 ```
-http://localhost:8080/swagger-ui.html
+http://localhost:8080/swagger-ui
 ```
 
 OpenAPI JSON specification is available at:
@@ -212,10 +218,10 @@ public class PostClient {
 The application uses Docker Compose to automatically start a MySQL container. Configuration is in `compose.yml`:
 
 - **Database**: MySQL 9.1
-- **Port**: 3306
-- **Database Name**: employeedb
-- **Username**: root
-- **Password**: Password123
+- **Port**: 3307 (host) → 3306 (container)
+- **Database Name**: rest_client
+- **Username**: hendisantika
+- **Password**: 53cret
 
 Database schema is automatically created by Hibernate on startup.
 
@@ -235,19 +241,57 @@ Unit tests use `@RestClientTest` to test REST client implementations without sta
 
 Integration tests in `RestClientTest.java` are disabled by default. To run them:
 
-1. Start the application: `mvn spring-boot:run`
+1. Start the application: `./mvnw spring-boot:run`
 2. Remove the `@Disabled` annotation from `RestClientTest.java`
 3. Run the tests: `mvn test`
 
 ## Configuration
 
-Application properties can be configured in `src/main/resources/application.yml`:
+Application properties can be configured in `src/main/resources/application.properties`:
 
 - Server port
 - Database connection
 - Hibernate settings
 - Logging levels
 - API documentation settings
+
+## Upgrading to Spring Boot 4 / JDK 25
+
+Notable changes applied in this project:
+
+- `java.version` is set to `25` and the compiler plugin uses `${java.version}`
+- `spring-boot-starter-web` → `spring-boot-starter-webmvc`, plus `spring-boot-starter-restclient`
+- `RestClientCustomizer` moved to `org.springframework.boot.restclient`
+- `@RestClientTest` moved to `org.springframework.boot.restclient.test.autoconfigure`
+  (requires `spring-boot-starter-restclient-test`)
+- Jackson 3: `com.fasterxml.jackson.databind.ObjectMapper` → `tools.jackson.databind.ObjectMapper`
+- Testcontainers 2.x renamed its modules: `junit-jupiter` → `testcontainers-junit-jupiter`,
+  `mysql` → `testcontainers-mysql`
+
+## Continuous Integration
+
+GitHub Actions workflow [`.github/workflows/maven.yml`](.github/workflows/maven.yml) runs on every push / pull request
+to `main` (and manually via *workflow_dispatch*):
+
+1. Checkout the code
+2. Set up Testcontainers Cloud (optional, uses the `TC_CLOUD_TOKEN` secret)
+3. Set up **Temurin JDK 25** with Maven cache
+4. Build & test with `mvn -B package`
+5. Submit the Maven dependency graph (on `main` only; requires *Dependency graph* to be enabled in the repository
+   settings)
+
+## Dependency Updates (Dependabot)
+
+[`.github/dependabot.yml`](.github/dependabot.yml) keeps dependencies up to date every Monday 21:00 (Asia/Jakarta):
+
+| Ecosystem        | What is updated                  | Grouping                                                        |
+|------------------|----------------------------------|-----------------------------------------------------------------|
+| `maven`          | `pom.xml` dependencies & plugins | `spring-boot`, `springdoc`, `testcontainers`, `maven-plugins`, `minor-and-patch` |
+| `github-actions` | Actions used in workflows        | single `github-actions` group                                   |
+| `docker-compose` | Images in `compose.yml` (MySQL)  | -                                                               |
+
+Pull requests are labelled (`dependencies`, `java`, `github-actions`, `docker`) and use conventional commit prefixes
+(`build(deps)`, `ci(deps)`, `build(docker)`).
 
 ## Development
 
