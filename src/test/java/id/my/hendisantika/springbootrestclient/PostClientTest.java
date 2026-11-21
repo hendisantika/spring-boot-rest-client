@@ -1,12 +1,11 @@
 package id.my.hendisantika.springbootrestclient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import id.my.hendisantika.springbootrestclient.client.PostClient;
 import id.my.hendisantika.springbootrestclient.dto.Post;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.restclient.test.autoconfigure.RestClientTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
@@ -39,7 +38,7 @@ class PostClientTest {
     ObjectMapper objectMapper;
 
     @Test
-    public void shouldReturnAllPosts() throws JsonProcessingException {
+    public void shouldReturnAllPosts() {
         // given
         List<Post> data = List.of(
                 new Post(1, 1, "Hello, World!", "This is my first post!"),

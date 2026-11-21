@@ -1,12 +1,11 @@
 package id.my.hendisantika.springbootrestclient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import id.my.hendisantika.springbootrestclient.client.RestClientService;
 import id.my.hendisantika.springbootrestclient.dto.EmployeeDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.restclient.test.autoconfigure.RestClientTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
@@ -36,7 +35,7 @@ public class EmployeeClientTest {
     ObjectMapper objectMapper;
 
     @Test
-    public void shouldCreateEmployee() throws JsonProcessingException {
+    public void shouldCreateEmployee() {
         // given
         EmployeeDto newEmployee = new EmployeeDto(null, "admin", "admin", "admin@gmail.com");
         EmployeeDto savedEmployee = new EmployeeDto(1L, "admin", "admin", "admin@gmail.com");
